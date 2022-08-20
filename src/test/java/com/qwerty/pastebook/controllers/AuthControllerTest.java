@@ -1,17 +1,18 @@
 package com.qwerty.pastebook.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.qwerty.pastebook.dto.auth.LoginDTO;
 import com.qwerty.pastebook.dto.auth.RegisterDTO;
 import com.qwerty.pastebook.entities.UserEntity;
 import com.qwerty.pastebook.repositories.UserRepository;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -32,6 +33,9 @@ class AuthControllerTest {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Test
     @DisplayName("Unsuccessful registration with an empty username")
@@ -213,9 +217,66 @@ class AuthControllerTest {
     }
 
     @Test
+    @DisplayName("Successful login")
+    @SneakyThrows
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
     void login() {
         //Before
+        UserEntity user = new UserEntity("username", bCryptPasswordEncoder.encode("password"));
+        userRepository.save(user);
+        String dto = objectMapper.writeValueAsString(new LoginDTO("username", "password"));
         //When
+        ResultActions jsonResp = mockMvc.perform(post("/api/v1/login").content(dto).contentType(MediaType.APPLICATION_JSON));
         //Then
+        jsonResp.andExpect(status().isOk())
+                .andExpect(jsonPath("$.token").isString());
+    }
+
+    @Test
+    @DisplayName("Unsuccessful login with wrong username")
+    @SneakyThrows
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    void loginWithWrongUsername() {
+        //Before
+        UserEntity user = new UserEntity("username", bCryptPasswordEncoder.encode("password"));
+        userRepository.save(user);
+        String dto = objectMapper.writeValueAsString(new LoginDTO("anotherUsername", "password"));
+        //When
+        ResultActions jsonResp = mockMvc.perform(post("/api/v1/login").content(dto).contentType(MediaType.APPLICATION_JSON));
+        //Then
+        jsonResp.andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("username and/or password invalid"));
+    }
+
+    @Test
+    @DisplayName("Unsuccessful login with wrong password")
+    @SneakyThrows
+    @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+    void loginWithWrongPassword() {
+        //Before
+        UserEntity user = new UserEntity("username", bCryptPasswordEncoder.encode("password"));
+        userRepository.save(user);
+        String dto = objectMapper.writeValueAsString(new LoginDTO("username", "anotherPassword"));
+        //When
+        ResultActions jsonResp = mockMvc.perform(post("/api/v1/login").content(dto).contentType(MediaType.APPLICATION_JSON));
+        //Then
+        jsonResp.andExpect(status().isUnauthorized())
+                .andExpect(jsonPath("$.message").value("username and/or password invalid"));
+    }
+
+        @Test
+        @DisplayName("Unsuccessful login with wrong username and password")
+        @SneakyThrows
+        @DirtiesContext(methodMode = DirtiesContext.MethodMode.AFTER_METHOD)
+        void loginWithWrongUsernameAndPassword() {
+            //Before
+            UserEntity user = new UserEntity("username", bCryptPasswordEncoder.encode("password"));
+            userRepository.save(user);
+            String dto = objectMapper.writeValueAsString(new LoginDTO("anotherUsername", "anotherPassword"));
+            //When
+            ResultActions jsonResp = mockMvc.perform(post("/api/v1/login").content(dto).contentType(MediaType.APPLICATION_JSON));
+            //Then
+            jsonResp.andExpect(status().isUnauthorized())
+                    .andExpect(jsonPath("$.message").value("username and/or password invalid"));
     }
 }
