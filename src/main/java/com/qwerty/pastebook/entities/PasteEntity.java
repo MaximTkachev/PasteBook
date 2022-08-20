@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "pastes")
@@ -25,11 +25,11 @@ public class PasteEntity {
     @Column
     private String title;
 
-    @Column(columnDefinition = "MEDIUMTEXT")
+    @Column(columnDefinition = "TEXT")
     private String text;
 
     @Temporal(TemporalType.TIMESTAMP)
-    private LocalDateTime expiration;
+    private Date expiration;
 
     @Enumerated(EnumType.STRING)
     private AccessModifier accessModifier;

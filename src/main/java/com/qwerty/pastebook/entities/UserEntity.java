@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -16,11 +17,16 @@ import java.util.List;
 @Setter
 public class UserEntity {
 
+    public UserEntity(String username, String password) {
+        this.username = username;
+        this.hashedPassword = password;
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
+    private Long id;
 
-    @Column
+    @Column(unique = true)
     private String username;
 
     @Column
@@ -29,5 +35,5 @@ public class UserEntity {
     @OneToMany(mappedBy = "owner",
     fetch = FetchType.LAZY,
     cascade = CascadeType.ALL)
-    private List<PasteEntity> pastes;
+    private final List<PasteEntity> pastes = new ArrayList<>();
 }
