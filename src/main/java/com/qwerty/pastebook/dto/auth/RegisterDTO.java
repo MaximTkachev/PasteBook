@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
 
 @Data
@@ -18,6 +19,7 @@ public class RegisterDTO {
     private String username;
 
     @Size(min = 8, max = 255,
-            message = "password length cannot be less than 5 and more than 255 symbols")
+            message = "password length cannot be less than 8 and more than 255 symbols")
+    @NotEmpty(message = "password length cannot be less than 8 and more than 255 symbols")
     private String password;
 }
