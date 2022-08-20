@@ -36,7 +36,7 @@ public class AuthService {
             return jwTokenProvider.createTokenForUser(user);
         } catch (Exception e) {
             if (e.getClass().equals(DataIntegrityViolationException.class))
-                throw new BadRequestException("User with the same username already exists");
+                throw new BadRequestException("username has already taken");
             else {
                 throw new ServerError();
             }
@@ -47,7 +47,7 @@ public class AuthService {
     public TokenDTO login(LoginDTO dto) {
         authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(dto.getUsername(), dto.getPassword()));
         UserEntity user = userRepository.findByUsername(dto.getUsername())
-                .orElseThrow(() -> new UsernameNotFoundException("User doesn't exist"));
+                .orElseThrow(() -> new UsernameNotFoundException("user doesn't exist"));
         return jwTokenProvider.createTokenForUser(user);
     }
 }
