@@ -31,6 +31,9 @@ public class PasteEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date expiration;
 
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateOfCreation;
+
     @Enumerated(EnumType.STRING)
     private AccessModifier accessModifier;
 }
