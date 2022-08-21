@@ -42,6 +42,13 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = NotFoundException.class)
+    public ResponseEntity<?> handleNotFoundException(NotFoundException e) {
+        Map<String, String> message = new HashMap<>();
+        message.put("message", e.getMessage());
+        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(NotReadablePropertyException.class)
     public ResponseEntity<?> handleNotReadableExceptions(NotReadablePropertyException exception) {
         Map<String, String> message = new HashMap<>();
