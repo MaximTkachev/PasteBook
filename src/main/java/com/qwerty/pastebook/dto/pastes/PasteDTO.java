@@ -12,7 +12,7 @@ import java.util.Date;
 @NoArgsConstructor
 public class PasteDTO {
     private String hash;
-    private String ownerId;
+    private Long ownerId;
     private String title;
     private String text;
     private Date expiration;
