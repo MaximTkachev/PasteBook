@@ -56,6 +56,13 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(ForbiddenException.class)
+    public ResponseEntity<?> handleForbiddenException(ForbiddenException e) {
+        Map<String, String> message = new HashMap<>();
+        message.put("message", e.getMessage());
+        return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
+    }
+
     @ExceptionHandler(BadCredentialsException.class)
     public ResponseEntity<?> handleBadCredentialsException(BadCredentialsException e) {
         Map<String, String> message = new HashMap<>();
