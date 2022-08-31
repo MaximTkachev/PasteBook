@@ -44,7 +44,7 @@ public class CustomAuthorizationFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                     filterChain.doFilter(request, response);
                 } catch (Exception e) {
-                    throw new ForbiddenException(e.getMessage());
+                    throw new ForbiddenException("invalid token");
                 }
             } else {
                 filterChain.doFilter(request, response);

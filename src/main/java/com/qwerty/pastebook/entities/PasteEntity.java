@@ -23,13 +23,16 @@ public class PasteEntity {
     private UserEntity owner;
 
     @Column
-    private String title;
+    private String title = "Untitled";
 
     @Column(columnDefinition = "TEXT")
     private String text;
 
     @Temporal(TemporalType.TIMESTAMP)
     private Date expiration;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateOfCreation;
 
     @Enumerated(EnumType.STRING)
     private AccessModifier accessModifier;

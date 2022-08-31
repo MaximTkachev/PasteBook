@@ -1,9 +1,11 @@
 package com.qwerty.pastebook.exceptions;
 
+import com.fasterxml.jackson.databind.exc.ValueInstantiationException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.NotReadablePropertyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -42,11 +44,25 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(NotReadablePropertyException.class)
-    public ResponseEntity<?> handleNotReadableExceptions(NotReadablePropertyException exception) {
+    @ExceptionHandler(value = NotFoundException.class)
+    public ResponseEntity<?> handleNotFoundException(NotFoundException e) {
         Map<String, String> message = new HashMap<>();
-        message.put("message", "some data are strange");
+        message.put("message", e.getMessage());
+        return new ResponseEntity<>(message, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(value = {NotReadablePropertyException.class, HttpMessageNotReadableException.class})
+    public ResponseEntity<?> handleNotReadableExceptions(Exception exception) {
+        Map<String, String> message = new HashMap<>();
+        message.put("message", "some data is strange");
         return new ResponseEntity<>(message, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = ForbiddenException.class)
+    public ResponseEntity<?> handleForbiddenException(ForbiddenException e) {
+        Map<String, String> message = new HashMap<>();
+        message.put("message", e.getMessage());
+        return new ResponseEntity<>(message, HttpStatus.FORBIDDEN);
     }
 
     @ExceptionHandler(BadCredentialsException.class)
