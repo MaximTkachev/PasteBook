@@ -29,21 +29,19 @@ public enum ExpirationPeriod {
 
     @JsonCreator
     public static ExpirationPeriod fromText(String text) {
-        switch (text) {
-            case "10m":
-                return ExpirationPeriod.TenMinutes;
-            case "1h":
-                return ExpirationPeriod.OneHour;
-            case "3h":
-                return ExpirationPeriod.ThreeHours;
-            case "1d":
-                return ExpirationPeriod.OneDay;
-            case "1w":
-                return ExpirationPeriod.OneWeek;
-            case "N":
-                return ExpirationPeriod.Eternal;
-            default:
-                throw new BadRequestException("unknown expiration period");
-        }
+        if (text.equals("10m") || text.equals("TenMinutes"))
+            return ExpirationPeriod.TenMinutes;
+        if (text.equals("1h") || text.equals("OneHour"))
+            return ExpirationPeriod.OneHour;
+        if (text.equals("3h") || text.equals("ThreeHours"))
+            return ExpirationPeriod.ThreeHours;
+        if (text.equals("1d") || text.equals("OneDay"))
+            return ExpirationPeriod.OneDay;
+        if (text.equals("1w") || text.equals("OneWeek"))
+            return ExpirationPeriod.OneWeek;
+        if (text.equals("N") || text.equals("Eternal"))
+            return ExpirationPeriod.Eternal;
+
+        throw new BadRequestException("unknown expiration period");
     }
 }
