@@ -20,6 +20,6 @@ public class UploadPasteDTO {
     @NotNull(message = "access modifier cannot be null")
     private AccessModifier accessModifier;
 
-    @NotNull(message = "expiration period cannot bu null")
+    @NotNull(message = "expiration period cannot be null")
     private ExpirationPeriod expirationPeriod;
 }
