@@ -23,7 +23,7 @@ public class PasteEntity {
     private UserEntity owner;
 
     @Column
-    private String title;
+    private String title = "Untitled";
 
     @Column(columnDefinition = "TEXT")
     private String text;
