@@ -29,8 +29,8 @@ In total, the system supports 6 expiration periods of the paste and each of them
 
 | Method | Path                       | Description                       | Authentication is required | 
 |--------|----------------------------|-----------------------------------|:--------------------------:|
-| POST   | /api/v1/register           | Register new user                 |             ×              |
-| POST   | /api/v1/register           | Register new user                 |             ×              |
+| POST   | /api/v1/register           | Register new user                 |             ❌              |
+| POST   | /api/v1/register           | Register new user                 |             ❌              |
 | GET    | /api/v1/pastes/hash/{hash} | Get existing paste by hash        |             ✔              |
 | POST   | /api/v1/pastes/new         | Create new paste                  |             ✔              |
 | GET    | /api/v1/pastes/my          | Get all the user's pastes         |             ✔              |
@@ -41,9 +41,20 @@ In total, the system supports 6 expiration periods of the paste and each of them
 
 1. Spring boot
 2. Postgresql
-3. Flyway
-4. Jawa JWT
-5. JUnit
-6. Hamcrest
-7. ModelMapper
-8. Lombok
+3. Java JWT
+4. JUnit
+5. Hamcrest
+6. ModelMapper
+7. Lombok
+
+# Let's try it out
+
+1. Build the project
+```text
+mvn clean install -DskipTests 
+```
+
+2. Run the service with docker compose
+```text
+docker-compose up 
+```
