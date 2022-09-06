@@ -1,0 +1,22 @@
+version: '3.1'
+
+services:
+  app:
+    image: 'docker-spring-boot-postgres:latest'
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - db
+    ports:
+      - "8080:8080"
+
+  db:
+    image: 'postgres:13.1-alpine'
+    ports:
+      - "5432:5432"
+    container_name: db
+    environment:
+      - POSTGRES_USER=pastebookadmin
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=pastebook
